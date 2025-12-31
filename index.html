@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ashutosh's New Year 2026 🎉</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;500;700&family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* =========================================
+           1. CORE THEME & UTILITIES
+           ========================================= */
+        :root {
+            /* Animated Deep Aurora Gradient */
+            --bg-gradient: linear-gradient(125deg, #2e1065 0%, #701a75 25%, #be185d 50%, #b45309 75%, #0f172a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #ffffff;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .glass-button {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-button:active { transform: scale(0.96); }
+        .glass-button:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.4); }
+
+        .gradient-text {
+            background: linear-gradient(to right, #fbbf24, #f472b6, #e879f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        /* Animations */
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        /* Canvas */
+        #fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        
+        /* Visibility */
+        .hidden-section { display: none !important; opacity: 0; }
+        .visible-section { display: flex !important; animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================
+           2. GAME OVERLAY STYLES
+           ========================================= */
+        #game-overlay {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            background-image: radial-gradient(circle at 10% 20%, rgb(255, 222, 222) 0%, rgb(255, 250, 220) 90%);
+            color: #4a4a4a;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+        #game-overlay.fade-out { opacity: 0; pointer-events: none; transform: scale(1.1); }
+
+        .card-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 4px solid #fff;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1), 0 0 0 10px rgba(255,255,255,0.4);
+            border-radius: 2rem;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .btn-game { transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .btn-game:active { transform: scale(0.92) translateY(2px); }
+        .pop-in { animation: popIn 0.5s forwards; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        #confetti-game-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+        .wheel-container { width: 220px; height: 220px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.8); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); box-shadow: 0 0 20px rgba(0,0,0,0.5); background: conic-gradient(#ec4899 0deg 60deg, #fbbf24 60deg 120deg, #8b5cf6 120deg 180deg, #06b6d4 180deg 240deg, #10b981 240deg 300deg, #f43f5e 300deg 360deg); }
+        .wheel-arrow { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #fff; z-index: 10; }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
+        /* Tap Game */
+        .tap-btn-active { transform: scale(0.95); background: rgba(255, 255, 255, 0.4); border-color: #fbbf24; }
+    </style>
+</head>
+<body class="antialiased min-h-[100dvh] relative selection:bg-pink-500 selection:text-white">
+
+    <!-- ============================================
+         LAYER 1: GAME OVERLAY (Visible Initially)
+         ============================================ -->
+    <div id="game-overlay">
+        <canvas id="confetti-game-canvas"></canvas>
+
+        <main class="w-full max-w-md p-4 relative z-10">
+            <!-- SCREEN 1: GREETING -->
+            <div id="screen-greeting" class="card-container p-8 text-center space-y-6 pop-in">
+                <div class="animate-float text-7xl mb-2 drop-shadow-md">🎉</div>
+                <div class="space-y-4">
+                    <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400 font-heading" style="font-family: 'Fredoka', sans-serif;">
+                        Happy New Year!
+                    </h1>
+                    <div class="min-h-[80px] flex items-center justify-center">
+                        <p class="text-gray-600 font-bold text-lg leading-relaxed">
+                            <span id="typewriter-text"></span><span class="cursor-blink text-pink-500 text-xl">|</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-xl border-2 border-blue-100">
+                    <p class="text-blue-600 text-sm font-semibold">
+                        I made a stupid game for you.<br>Let's see if I can guess who you are.
+                    </p>
+                </div>
+                <button onclick="gameLogic.startGame()" class="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-4 rounded-xl text-xl font-bold shadow-lg shadow-fuchsia-200 btn-game flex items-center justify-center gap-2">
+                    <i data-lucide="play-circle"></i> Play Game
+                </button>
+            </div>
+
+            <!-- SCREEN 2: GAME -->
+            <div id="screen-game" class="hidden text-center card-container p-6 relative">
+                <div class="absolute top-0 left-0 w-full h-3 bg-gray-100 rounded-t-2xl overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-300" style="width: 10%"></div>
+                </div>
+                <div class="mt-4 mb-2">
+                    <span class="bg-gray-100 text-gray-400 text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wide">Question <span id="q-number">1</span></span>
+                </div>
+                <div class="min-h-[200px] flex flex-col justify-center items-center mb-6">
+                    <div class="text-6xl mb-4 transform transition-transform hover:scale-110 cursor-pointer" id="q-emoji">🤔</div>
+                    <h2 id="q-text" class="text-2xl font-bold text-gray-700 leading-tight px-2">Question goes here?</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-3" id="answer-buttons-container"></div>
+                <div class="mt-6 text-xs text-red-400 font-bold italic opacity-80 animate-pulse">⚠️ Note: Don't lie, be honest!</div>
+            </div>
+
+            <!-- SCREEN 3: DRAMA -->
+            <div id="screen-drama" class="hidden text-center card-container p-10">
+                <div class="text-6xl animate-bounce mb-6">🧠</div>
+                <h2 class="text-2xl font-bold text-purple-600">Processing...</h2>
+                <p class="text-gray-400 mt-2 font-medium" id="drama-text">Reading your mind...</p>
+            </div>
+
+            <!-- SCREEN 4: SECURITY CHECK -->
+            <div id="screen-security" class="hidden text-center card-container p-8 border-4 border-indigo-200">
+                <div class="text-5xl mb-4">🔐</div>
+                <h2 class="text-xl font-bold text-indigo-800 mb-2">Security Check</h2>
+                <p class="text-gray-500 text-sm mb-6">Wait! Anyone can guess answers.<br>Prove you are <span id="security-name" class="font-bold text-indigo-600">...</span> by answering this:</p>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-4">
+                    <p id="security-question" class="text-lg font-bold text-indigo-900 leading-tight">Question?</p>
+                </div>
+                <input type="text" id="security-input" class="w-full p-4 rounded-xl border-2 border-indigo-100 bg-white mb-4 focus:outline-none focus:border-indigo-400 font-bold text-center text-gray-700" placeholder="Type answer here...">
+                <button onclick="gameLogic.verifyIdentity()" class="w-full bg-indigo-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-indigo-200 btn-game">Verify Identity</button>
+            </div>
+
+            <!-- SCREEN 5: SUCCESS -->
+            <div id="screen-success" class="hidden text-center card-container p-8 border-4 border-yellow-300">
+                <h2 class="text-xl font-bold text-pink-500 mb-2 uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles"></i> FOUND YOU
+                </h2>
+                <div class="relative inline-block mb-6 mt-2">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full blur opacity-50 animate-pulse"></div>
+                    <img id="result-image" src="" alt="Friend" class="relative w-40 h-40 rounded-full object-cover mx-auto border-4 border-white shadow-xl">
+                </div>
+                <h1 id="result-name" class="text-4xl font-extrabold mb-4 text-gray-800">Name</h1>
+                <div class="bg-green-50 p-4 rounded-xl border border-green-200 mb-6">
+                    <p class="text-green-700 font-bold text-lg leading-relaxed">
+                        Verified ✅<br>
+                        <span class="text-sm font-normal opacity-90">Let's enter your space.</span>
+                    </p>
+                </div>
+                <button onclick="transitionToDashboard()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl font-bold shadow-xl hover:scale-105 transition-transform">
+                    ENTER DASHBOARD 🚀
+                </button>
+            </div>
+
+            <!-- SCREEN 6: TROLL -->
+            <div id="screen-troll" class="hidden text-center card-container p-8 border-4 border-red-100">
+                <div class="text-7xl mb-4">🤡</div>
+                <h2 id="troll-title" class="text-3xl font-bold text-red-500 mb-2">You Liar!</h2>
+                <p id="troll-text" class="text-gray-500 text-lg mb-8 font-semibold">Ashutosh knows everything.</p>
+                <button onclick="location.reload()" class="w-full bg-red-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-200 btn-game flex items-center justify-center gap-2">
+                    <i data-lucide="refresh-ccw"></i> Try Again (Honestly)
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================
+         LAYER 2: APP DASHBOARD (Hidden Initially)
+         ============================================ -->
+    <div id="app-dashboard" style="display: none;">
+        <!-- Canvas Background -->
+        <canvas id="fireworks-canvas"></canvas>
+
+        <!-- Navbar -->
+        <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 border-t-0 border-x-0 h-16 flex items-center justify-between px-4 bg-black/10 backdrop-blur-md">
+            <div class="font-bold text-lg tracking-tighter flex items-center gap-2 cursor-pointer group" onclick="app.navTo('hero')">
+                <span class="text-xl group-hover:scale-110 transition-transform">🎉</span>
+                <span class="hidden md:inline font-display">From Ashutosh</span>
+            </div>
+            <div class="flex gap-2">
+                <button id="music-toggle" class="glass-button w-9 h-9 rounded-full flex items-center justify-center text-xs transition-transform active:scale-90"><i class="fas fa-volume-mute"></i></button>
+                <div class="hidden md:flex gap-2">
+                    <button onclick="app.navTo('vibes')" class="glass-button px-3 py-1.5 rounded-full text-xs font-semibold">🎵 Vibes</button>
+                    <button onclick="app.navTo('games')" class="glass-button px-3 py-1.5 rounded-full text-xs font-semibold">🎮 Play</button>
+                </div>
+                <button onclick="app.toggleMenu()" class="glass-button w-9 h-9 rounded-full flex items-center justify-center text-xs md:hidden"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl hidden flex-col items-center justify-center gap-6 text-xl font-bold font-display transition-all duration-300">
+            <a onclick="app.navTo('hero'); app.toggleMenu()" href="#" class="hover:text-pink-400">🏠 Home</a>
+            <a onclick="app.navTo('vibes'); app.toggleMenu()" href="#" class="hover:text-pink-400">🎵 Music Zone</a>
+            <a onclick="app.navTo('games'); app.toggleMenu()" href="#" class="hover:text-pink-400">🎮 Fun Games</a>
+            <a onclick="app.navTo('personal'); app.toggleMenu()" href="#" class="hover:text-pink-400">💌 My Message</a>
+            <button onclick="app.toggleMenu()" class="mt-4 text-sm opacity-50 border border-white/30 px-6 py-2 rounded-full">Close</button>
+        </div>
+
+        <main class="container mx-auto px-4 pt-16 relative z-10 min-h-[100dvh] flex flex-col items-center">
+            
+            <!-- SECTION: HERO -->
+            <section id="hero-section" class="visible-section w-full flex-col items-center justify-center min-h-[calc(100dvh-4rem)] py-4">
+                <div class="glass-panel px-4 py-1.5 rounded-full text-[10px] md:text-sm font-bold mb-4 animate-float text-yellow-300 border-yellow-300/30 flex items-center gap-2 shadow-lg">
+                    <i class="fas fa-heart text-[10px] text-pink-500"></i>
+                    <span>From Ashutosh</span>
+                    <i class="fas fa-heart text-[10px] text-pink-500"></i>
+                </div>
+                <div class="mb-3 relative text-center">
+                    <h1 id="greeting-text" class="text-4xl md:text-7xl font-black tracking-tighter leading-tight drop-shadow-2xl font-display bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-pink-200">
+                        Hey Friend! 🥳
+                    </h1>
+                </div>
+                <h2 class="text-sm md:text-xl text-[var(--text-muted)] mb-6 max-w-lg font-medium leading-relaxed text-center opacity-90 px-2">
+                    I made this little space just for you. <br>
+                    Let's celebrate <span class="gradient-text">2026</span> together! 🥂
+                </h2>
+                
+                <!-- Open Greeting Card Button -->
+                <button onclick="app.openGreetingCard()" class="mb-8 glass-button px-8 py-3 rounded-full text-lg font-bold bg-white/10 hover:bg-white/20 border-white/30 shadow-xl flex items-center gap-2 animate-bounce">
+                    <i class="fas fa-envelope-open-text text-yellow-300"></i> Open Greeting Card
+                </button>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-3xl mb-6">
+                    <button onclick="app.navTo('games')" class="glass-button p-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/10 h-24 md:h-32"><span class="text-3xl filter drop-shadow-md">🎮</span><span class="font-bold text-xs tracking-wide mt-1">Games</span></button>
+                    <button onclick="app.navTo('vibes')" class="glass-button p-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/10 h-24 md:h-32"><span class="text-3xl filter drop-shadow-md">🎵</span><span class="font-bold text-xs tracking-wide mt-1">Songs</span></button>
+                    <button onclick="app.navTo('movie')" class="glass-button p-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/10 h-24 md:h-32"><span class="text-3xl filter drop-shadow-md">🎬</span><span class="font-bold text-xs tracking-wide mt-1">Movie</span></button>
+                    <button onclick="app.navTo('personal')" class="glass-button p-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/10 h-24 md:h-32"><span class="text-3xl filter drop-shadow-md">💌</span><span class="font-bold text-xs tracking-wide mt-1">Note</span></button>
+                </div>
+                <div class="glass-panel px-4 py-3 rounded-xl flex gap-3 justify-center items-center bg-black/20 border-white/5 transform scale-90 md:scale-100">
+                    <div class="text-center"><div id="days" class="text-xl font-bold font-mono text-white">00</div><div class="text-[9px] uppercase opacity-60">Days</div></div>
+                    <div class="text-lg font-light opacity-30 pb-3">:</div>
+                    <div class="text-center"><div id="hours" class="text-xl font-bold font-mono text-white">00</div><div class="text-[9px] uppercase opacity-60">Hrs</div></div>
+                    <div class="text-lg font-light opacity-30 pb-3">:</div>
+                    <div class="text-center"><div id="minutes" class="text-xl font-bold font-mono text-white">00</div><div class="text-[9px] uppercase opacity-60">Mins</div></div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: PERSONAL MESSAGE -->
+            <section id="personal-section" class="hidden-section flex-col items-center w-full max-w-2xl pt-8 pb-10">
+                <button onclick="app.navTo('hero')" class="mb-4 glass-button px-4 py-1 rounded-full text-xs opacity-80 hover:opacity-100 inline-flex items-center gap-2"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+                <div class="glass-panel p-8 rounded-[2rem] text-center border border-white/20 shadow-2xl w-full">
+                    <div class="text-5xl mb-4">💌</div>
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 font-display gradient-text">Straight from the Heart</h2>
+                    <div class="text-base md:text-lg leading-relaxed opacity-90 space-y-4 font-serif italic text-white/90">
+                        <p>"No matter where we are in 2026..."</p>
+                        <p class="font-bold text-xl text-yellow-300 not-italic font-display">I’m glad you were part of my 2025.</p>
+                        <p>Thanks for the laughs and support. Let's make this year even crazier.</p>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/10 flex justify-center items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-sm">A</div>
+                        <div class="text-left"><div class="font-bold text-sm">Ashutosh</div><div class="text-[10px] opacity-70 uppercase tracking-wide">Your Friend</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: MUSIC -->
+            <section id="vibes-section" class="hidden-section flex-col items-center w-full max-w-3xl pt-4">
+                <button onclick="app.navTo('hero')" class="mb-4 glass-button px-4 py-1 rounded-full text-xs opacity-80 hover:opacity-100 inline-flex items-center gap-2"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+                <div class="text-center mb-6">
+                    <div class="inline-block p-3 rounded-full glass-panel mb-2 animate-float"><span class="text-3xl">🎧</span></div>
+                    <h2 class="text-3xl font-bold font-display">2026 Vibe</h2>
+                    <p class="opacity-70 text-sm">Put on your headphones.</p>
+                </div>
+                <div class="glass-panel p-2 rounded-2xl mb-8 w-full border border-white/20">
+                    <div class="spotify-wrapper h-[352px]">
+                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: MOVIE -->
+            <section id="movie-section" class="hidden-section flex-col items-center w-full max-w-md pt-8">
+                <button onclick="app.navTo('hero')" class="mb-4 glass-button px-4 py-1 rounded-full text-xs opacity-80 hover:opacity-100 inline-flex items-center gap-2"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+                <div class="glass-panel p-8 rounded-[2rem] border border-pink-400/30 text-center w-full">
+                    <div class="text-6xl mb-4 animate-bounce">🍿</div>
+                    <h2 class="text-2xl font-bold mb-2 font-display">Online Movie Night</h2>
+                    <p class="opacity-80 mb-2 text-sm font-bold text-yellow-300">Location: Discord / Zoom</p>
+                    <p class="opacity-80 mb-8 text-sm">Let's stream something together. My treat.</p>
+                    <a href="https://instagram.com/" target="_blank" class="block w-full glass-button bg-pink-600/40 hover:bg-pink-600/60 py-3 rounded-xl font-bold text-white shadow-lg transition-all">DM Me "Let's Watch"</a>
+                </div>
+            </section>
+
+            <!-- SECTION 2: GAMES -->
+            <section id="games-section" class="hidden-section flex-col items-center w-full max-w-5xl pt-4">
+                <button onclick="app.navTo('hero')" class="mb-4 glass-button px-4 py-1 rounded-full text-xs opacity-80 hover:opacity-100 inline-flex items-center gap-2"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+                <h2 class="text-4xl font-bold mb-2 text-center font-display gradient-text">Party Zone 🎮</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full pb-8">
+                    <!-- Spin Wheel -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center text-center relative overflow-hidden border border-white/20">
+                        <h3 class="text-xl font-bold mb-4 font-display">Wheel of Fate</h3>
+                        <div class="relative mb-6 scale-90"><div class="wheel-arrow"></div><div id="wheel" class="wheel-container"></div></div>
+                        <p id="wheel-result" class="min-h-[2rem] flex items-center justify-center font-bold text-yellow-300 text-lg mb-4"></p>
+                        <button onclick="games.spinWheel()" class="glass-button px-8 py-2 rounded-full font-bold bg-white/10 hover:bg-white/20 text-sm">SPIN IT</button>
+                    </div>
+
+                    <!-- Truth or Dare -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20">
+                        <h3 class="text-xl font-bold mb-2 font-display">Truth or Dare 🌶️</h3>
+                        <div id="tod-display" class="w-full min-h-[80px] bg-black/20 rounded-2xl p-4 flex items-center justify-center mb-4 border border-white/10"><p class="text-sm italic opacity-80">Tap a button...</p></div>
+                        <div class="flex gap-3 w-full">
+                            <button onclick="games.getTruthDare('Truth')" class="flex-1 glass-button py-3 rounded-xl bg-blue-500/20 font-bold text-blue-100 text-sm">Truth 😇</button>
+                            <button onclick="games.getTruthDare('Dare')" class="flex-1 glass-button py-3 rounded-xl bg-red-500/20 font-bold text-red-100 text-sm">Dare 😈</button>
+                        </div>
+                    </div>
+
+                    <!-- NEW GAME: Friend Type 2026 -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20">
+                        <h3 class="text-xl font-bold mb-2 font-display">Friend Type '26 🎭</h3>
+                        <div id="friend-type-display" class="w-full min-h-[80px] bg-black/20 rounded-2xl p-4 flex items-center justify-center mb-4 border border-white/10">
+                            <p class="text-sm italic opacity-80">Are you a Ghost or a Legend?</p>
+                        </div>
+                        <button onclick="games.startFriendType()" class="w-full glass-button py-3 rounded-xl bg-purple-500/20 font-bold text-purple-100 text-sm">Analyze Me</button>
+                    </div>
+
+                    <!-- NEW GAME: 10-Sec Tap Challenge -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20">
+                        <h3 class="text-xl font-bold mb-2 font-display">Tap Challenge ⚡</h3>
+                        <div class="flex justify-between w-full px-4 mb-2 text-xs font-bold opacity-70">
+                            <span id="tap-time">Time: 10s</span>
+                            <span id="tap-score">Score: 0</span>
+                        </div>
+                        <button id="tap-btn" onclick="games.tapGameAction()" class="w-full h-24 glass-button rounded-xl bg-yellow-500/10 font-bold text-2xl text-yellow-100 mb-2 active:scale-95 transition-transform">START</button>
+                        <p id="tap-roast" class="text-xs italic opacity-60 min-h-[1rem]"></p>
+                    </div>
+
+                    <!-- NEW GAME: Fortune Cookie -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20">
+                        <h3 class="text-xl font-bold mb-2 font-display">Fortune Cookie 🥠</h3>
+                        <div id="fortune-display" class="w-full min-h-[80px] bg-black/20 rounded-2xl p-4 flex items-center justify-center mb-4 border border-white/10"><p class="text-sm italic opacity-80">What does 2026 hold?</p></div>
+                        <button onclick="games.openFortune()" class="w-full glass-button py-3 rounded-xl bg-yellow-500/20 font-bold text-yellow-100 text-sm">Crack Cookie</button>
+                    </div>
+
+                    <!-- NEW GAME: Never Have I Ever -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20">
+                        <h3 class="text-xl font-bold mb-2 font-display">Never Have I Ever 🤫</h3>
+                        <div id="nhie-display" class="w-full min-h-[80px] bg-black/20 rounded-2xl p-4 flex items-center justify-center mb-4 border border-white/10"><p class="text-sm italic opacity-80">Expose your friends...</p></div>
+                        <button onclick="games.getNHIE()" class="w-full glass-button py-3 rounded-xl bg-purple-500/20 font-bold text-purple-100 text-sm">Next Prompt</button>
+                    </div>
+
+                    <!-- EXTERNAL GAME LINK -->
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col items-center justify-center text-center border border-white/20 col-span-1 md:col-span-2">
+                        <h3 class="text-xl font-bold mb-2 font-display">Murder Mystery 🕵️‍♂️</h3>
+                        <p class="text-sm opacity-70 mb-4">Can you solve the case?</p>
+                        <a href="https://royverse69.github.io/murder-mystery/" target="_blank" class="w-full glass-button py-3 rounded-xl bg-red-900/40 hover:bg-red-800/60 font-bold text-white text-sm">Play Mystery Game <i class="fas fa-external-link-alt ml-2"></i></a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center py-4 opacity-40 text-[10px] relative z-10 font-mono text-white w-full"><p>Made with 💙 by Ashutosh</p></footer>
+    </div>
+
+    <!-- GREETING CARD MODAL -->
+    <div id="greeting-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel w-full max-w-md p-8 rounded-[2rem] relative transform scale-100 transition-transform border border-white/20 shadow-2xl">
+            <button onclick="app.closeGreetingCard()" class="absolute top-4 right-4 glass-button w-8 h-8 rounded-full flex items-center justify-center text-sm"><i class="fas fa-times"></i></button>
+            
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4 animate-float">💌</div>
+                <h2 class="text-3xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-yellow-300">For You, <span id="modal-friend-name">Friend</span></h2>
+            </div>
+            
+            <div class="bg-white/5 p-6 rounded-xl border border-white/10 text-center mb-6 backdrop-blur-sm">
+                <p class="font-serif italic text-lg leading-relaxed text-white/90">
+                    "As we step into 2026, I just wanted to remind you how awesome you are. Thanks for being the main character in my 2025 season. Let's make the sequel even better!"
+                </p>
+                <div class="mt-4 text-right">
+                    <p class="font-bold text-yellow-300 text-sm font-display">- Ashutosh 💙</p>
+                </div>
+            </div>
+
+            <button onclick="app.closeGreetingCard()" class="w-full glass-button py-3 rounded-xl font-bold bg-pink-500/20 hover:bg-pink-500/40 border-pink-400/30 text-pink-100">Aw, Thanks! 🥰</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // LOGIC 1: GAME CONTROLLER (GATEKEEPER)
+        // ----------------------------------------------------
+        
+        const friends = [
+            { id: 'tanish', name: "Tanish", gender: "boy", meet: "offline", glasses: true, image: "tanish.jpg", fallback: "https://api.dicebear.com/9.x/avataaars/svg?seed=Tanish&glasses=prescription01&clothing=hoodie&backgroundColor=c0aede", securityQ: "What is my Discord ID?", securityA: ["discord", "ashutosh#1234", "user"] },
+            { id: 'navya', name: "Navya", gender: "girl", meet: "offline", yearsKnown: 2, likesHorror: true, likesIceCream: true, image: "navya.jpg", fallback: "https://api.dicebear.com/9.x/avataaars/svg?seed=Navya&top=longHair&backgroundColor=ffdfbf", securityQ: "What is my Insta ID we use to talk?", securityA: ["littti_chokhaa", "litti chokha", "littichokhaa", "litti_chokha"] },
+            { id: 'piyush', name: "Piyush", gender: "boy", yearsKnown: 10, hasGirlfriend: true, phone: "oppo", image: "piyush.jpg", fallback: "https://api.dicebear.com/9.x/avataaars/svg?seed=Piyush&facialHair=beardLight&backgroundColor=b6e3f4", securityQ: "When is my Birthday? (DD/MM/YYYY)", securityA: ["7/6/2006", "07/06/2006", "7 june", "7th june", "7-6-2006"] },
+            { id: 'mann', name: "Mann Jha", gender: "boy", yearsKnown: 2, height: "6ft", smokes: true, phone: "infinix", image: "mann.jpg", fallback: "https://api.dicebear.com/9.x/avataaars/svg?seed=MannJha&clothing=blazerAndShirt&backgroundColor=c1f0c1", securityQ: "What was my school name in Class 6?", securityA: ["mlzs", "mount litera", "zee school", "mount litera zee school"] }
+        ];
+
+        const questions = [
+            { text: "Are you a Boy or a Girl?", emoji: "🚻", type: "gender" },
+            { text: "Do I know you offline? (Or are you an internet ghost?)", emoji: "👻", key: "meet", val: "offline", altKey: "yearsKnown"},
+            { text: "Have I tolerated you for more than 5 years?", emoji: "⏳", condition: (f) => f.yearsKnown > 5 },
+            { text: "Do you look smart? (Do you wear glasses?)", emoji: "🤓", key: "glasses", val: true },
+            { text: "Do you enjoy getting scared? (Horror movies)", emoji: "🧟", key: "likesHorror", val: true },
+            { text: "Do you think you can fight a chicken and win?", emoji: "🐔", isRubbish: true },
+            { text: "Is Ice Cream your entire personality?", emoji: "🍦", key: "likesIceCream", val: true },
+            { text: "Do you pollute the air? (Smoke)", emoji: "🚬", key: "smokes", val: true },
+            { text: "Are you a giant? (Taller than 5'10\")", emoji: "🦒", condition: (f) => f.height === "6ft" },
+            { text: "Do you wash your legs in the shower?", emoji: "🚿", isRubbish: true },
+            { text: "Do you use an Oppo phone?", emoji: "📱", key: "phone", val: "oppo" },
+            { text: "Do you use an Infinix phone?", emoji: "📲", key: "phone", val: "infinix" }
+        ];
+
+        let identifiedName = "Friend";
+        let currentQIndex = 0;
+        let scores = {}; 
+        let potentialWinnerId = null;
+        friends.forEach(f => scores[f.id] = 0);
+
+        const gameScreens = {
+            greeting: document.getElementById('screen-greeting'),
+            game: document.getElementById('screen-game'),
+            drama: document.getElementById('screen-drama'),
+            success: document.getElementById('screen-success'),
+            troll: document.getElementById('screen-troll'),
+            security: document.getElementById('screen-security')
+        };
+
+        const typeText = "Wishing you 365 days of laughter, luck, and absolutely zero bad vibes! ✨";
+        const typeElement = document.getElementById('typewriter-text');
+        let typeIndex = 0;
+        function startTypewriter() {
+            if (typeIndex < typeText.length) {
+                typeElement.innerHTML += typeText.charAt(typeIndex);
+                typeIndex++;
+                setTimeout(startTypewriter, 40);
+            }
+        }
+        setTimeout(startTypewriter, 500);
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.1); gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(); osc.stop(now + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.linearRampToValueAtTime(600, now + 0.1); osc.frequency.linearRampToValueAtTime(1000, now + 0.3); gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.5); osc.start(); osc.stop(now + 0.5);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(100, now + 0.3); gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3); osc.start(); osc.stop(now + 0.3);
+            }
+        }
+
+        const gameLogic = {
+            showScreen: (name) => {
+                Object.values(gameScreens).forEach(s => s.classList.add('hidden'));
+                gameScreens[name].classList.remove('hidden');
+            },
+            startGame: () => {
+                playSound('click');
+                gameLogic.showScreen('game');
+                gameLogic.loadQuestion();
+            },
+            loadQuestion: () => {
+                if (currentQIndex >= questions.length) { gameLogic.endGame(); return; }
+                const q = questions[currentQIndex];
+                const qText = document.getElementById('q-text');
+                qText.classList.remove('pop-in'); void qText.offsetWidth; qText.classList.add('pop-in');
+                
+                qText.innerText = q.text;
+                document.getElementById('q-emoji').innerText = q.emoji;
+                document.getElementById('q-number').innerText = currentQIndex + 1;
+                document.getElementById('progress-bar').style.width = `${((currentQIndex)/questions.length)*100}%`;
+
+                let buttonsHtml = '';
+                const btnClassBase = "btn-game py-4 rounded-xl font-bold text-lg shadow-sm border-b-4 active:border-b-0 active:translate-y-1 transition-all";
+                if (q.type === 'gender') {
+                    buttonsHtml = `
+                        <button onclick="gameLogic.handleAnswer('boy')" class="${btnClassBase} bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 flex flex-col items-center justify-center gap-2 h-auto py-6"><span>Boy 👦</span></button>
+                        <button onclick="gameLogic.handleAnswer('girl')" class="${btnClassBase} bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100 flex flex-col items-center justify-center gap-2 h-auto py-6"><span>Girl 👧</span></button>
+                        <button onclick="gameLogic.handleAnswer('unsure')" class="${btnClassBase} col-span-2 bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200 text-base mt-1">I identify as a toaster 🍞</button>`;
+                } else {
+                    buttonsHtml = `
+                        <button onclick="gameLogic.handleAnswer('yes')" class="${btnClassBase} bg-green-100 text-green-600 border-green-200 hover:bg-green-200">YES</button>
+                        <button onclick="gameLogic.handleAnswer('no')" class="${btnClassBase} bg-red-100 text-red-600 border-red-200 hover:bg-red-200">NO</button>
+                        <button onclick="gameLogic.handleAnswer('unsure')" class="${btnClassBase} col-span-2 bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200 text-base">Uhhh... maybe? 🫠</button>`;
+                }
+                document.getElementById('answer-buttons-container').innerHTML = buttonsHtml;
+            },
+            handleAnswer: (answer) => {
+                playSound('click');
+                const q = questions[currentQIndex];
+                if (!q.isRubbish) {
+                    friends.forEach(f => {
+                        let isMatch = false;
+                        if (q.type === 'gender') {
+                            if (answer === f.gender) isMatch = true;
+                            if (answer !== 'unsure' && answer !== f.gender) scores[f.id] -= 100;
+                        } else if (q.condition) {
+                            if (q.condition(f)) isMatch = true;
+                        } else {
+                            if (f[q.key] === q.val) isMatch = true;
+                            if (q.altKey && f[q.altKey]) isMatch = true;
+                        }
+                        if (answer === 'yes' || answer === 'boy' || answer === 'girl') { isMatch ? scores[f.id] += 10 : scores[f.id] -= 5; }
+                        else if (answer === 'no') { !isMatch ? scores[f.id] += 5 : scores[f.id] -= 10; }
+                    });
+                }
+                currentQIndex++;
+                setTimeout(gameLogic.loadQuestion, 200);
+            },
+            endGame: () => {
+                gameLogic.showScreen('drama');
+                const dramaTexts = ["Analyzing cringe levels...", "Checking if you owe me money...", "Consulting the stars...", "Reading your WhatsApp chats..."];
+                let i = 0;
+                const interval = setInterval(() => { document.getElementById('drama-text').innerText = dramaTexts[i % dramaTexts.length]; i++; }, 800);
+                setTimeout(() => {
+                    clearInterval(interval);
+                    let maxScore = -999;
+                    potentialWinnerId = null;
+                    Object.entries(scores).forEach(([id, score]) => { if (score > maxScore) { maxScore = score; potentialWinnerId = id; } });
+                    
+                    const MIN_SCORE = 25; 
+                    if (maxScore < MIN_SCORE) {
+                        const winner = potentialWinnerId ? friends.find(f => f.id === potentialWinnerId) : null;
+                        if (maxScore > 0 && maxScore < MIN_SCORE) {
+                            const genderTerm = winner ? (winner.gender === 'girl' ? 'Girl 👧' : 'Boy 👦') : 'human';
+                            document.getElementById('troll-text').innerHTML = `You said you're a ${genderTerm}, but you don't match the vibe.<br><span class="text-sm bg-red-100 text-red-600 px-2 py-1 rounded">⚠️ Need 2 more correct answers!</span>`;
+                        } else {
+                            document.getElementById('troll-text').innerHTML = "Ashutosh knows everything.<br>Don't lie on New Year's Day.";
+                        }
+                        gameLogic.showScreen('troll');
+                        playSound('error');
+                    } else {
+                        gameLogic.startSecurityCheck(potentialWinnerId);
+                    }
+                }, 3500);
+            },
+            startSecurityCheck: (id) => {
+                const friend = friends.find(f => f.id === id);
+                document.getElementById('security-name').innerText = friend.name;
+                document.getElementById('security-question').innerText = friend.securityQ;
+                document.getElementById('security-input').value = '';
+                gameLogic.showScreen('security');
+            },
+            verifyIdentity: () => {
+                const input = document.getElementById('security-input').value.toLowerCase().trim();
+                const friend = friends.find(f => f.id === potentialWinnerId);
+                if (!input) { alert("Write something!"); return; }
+                const cleanInput = input.replace(/[^a-z0-9]/g, '');
+                const isCorrect = friend.securityA.some(validAns => {
+                    const cleanValid = validAns.replace(/[^a-z0-9]/g, '');
+                    return cleanInput.includes(cleanValid) || cleanValid.includes(cleanInput);
+                });
+
+                if (isCorrect) {
+                    gameLogic.revealWinner(potentialWinnerId);
+                } else {
+                    playSound('error');
+                    const btn = document.querySelector('#screen-security button');
+                    btn.innerText = "❌ Wrong! Try Again shame on u";
+                    btn.classList.add('bg-red-500');
+                    setTimeout(() => { btn.innerText = "Verify Identity"; btn.classList.remove('bg-red-500'); }, 1500);
+                }
+            },
+            revealWinner: (id) => {
+                playSound('success');
+                const winner = friends.find(f => f.id === id);
+                document.getElementById('result-name').innerText = winner.name;
+                identifiedName = winner.name;
+                const imgEl = document.getElementById('result-image');
+                imgEl.src = winner.image;
+                imgEl.onerror = function() { this.onerror = null; this.src = winner.fallback; };
+                gameLogic.showScreen('success');
+                gameConfetti.start();
+            }
+        };
+
+        const gameConfetti = {
+            start: () => {
+                const canvas = document.getElementById('confetti-game-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+                let particles = [];
+                for (let i = 0; i < 200; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height, size: Math.random()*10+4, color: ['#ff0000', '#00ff00', '#0000ff'].sort(()=>0.5-Math.random())[0], speedY: Math.random()*3+2, speedX: Math.random()*2-1 });
+                function animate() {
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+                    particles.forEach(p => { p.y+=p.speedY; p.x+=p.speedX; if(p.y>canvas.height) p.y=-10; ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.size,p.size); });
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+        };
+
+        // ----------------------------------------------------
+        // LOGIC 2: APP DASHBOARD CONTROLLER
+        // ----------------------------------------------------
+        
+        function transitionToDashboard() {
+            playSound('success');
+            document.getElementById('greeting-text').innerText = `Hey ${identifiedName}! 🥳`;
+            document.getElementById('modal-friend-name').innerText = identifiedName; // Update Card Name
+            const overlay = document.getElementById('game-overlay');
+            overlay.classList.add('fade-out');
+            const dashboard = document.getElementById('app-dashboard');
+            dashboard.style.display = 'block';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                app.confettiExplosion();
+                app.openGreetingCard(); // Auto open card on entry for effect
+            }, 1000);
+        }
+
+        const app = {
+            navTo: (id) => {
+                playSound('click');
+                document.querySelectorAll('section').forEach(el => { el.classList.add('hidden-section'); el.classList.remove('visible-section'); el.style.display = 'none'; });
+                const target = document.getElementById(`${id}-section`);
+                target.classList.remove('hidden-section'); target.classList.add('visible-section'); target.style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            toggleMenu: () => { document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('flex'); },
+            confettiExplosion: () => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#fbbf24', '#f472b6'] }),
+            openGreetingCard: () => {
+                playSound('success');
+                document.getElementById('greeting-modal').classList.remove('hidden');
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.5 } });
+            },
+            closeGreetingCard: () => {
+                document.getElementById('greeting-modal').classList.add('hidden');
+            }
+        };
+
+        const games = {
+            // Existing Logic...
+            spinWheel: () => {
+                const w = document.getElementById('wheel');
+                w.style.transform = `rotate(${1800 + Math.random() * 1800}deg)`;
+                setTimeout(() => {
+                    document.getElementById('wheel-result').innerText = ["Coffee ☕", "Voice Note 🎤", "Selfie 📸", "Dance 💃", "Call Me 📞"][Math.floor(Math.random()*5)];
+                    app.confettiExplosion();
+                }, 4000);
+            },
+            getTruthDare: async (type) => {
+                document.getElementById('tod-display').innerHTML = '<div class="spinner"></div>';
+                setTimeout(() => {
+                   const prompts = type === 'Truth' ? ["Worst date ever?", "Last lie you told?", "Secret crush?"] : ["Do 10 pushups", "Sing a song", "Text your ex"]; 
+                   document.getElementById('tod-display').innerHTML = `<p class="font-bold">"${prompts[Math.floor(Math.random()*prompts.length)]}"</p>`;
+                }, 1000);
+            },
+            openFortune: () => {
+                const fortunes = ["2026 will be your richest year yet.", "Love is just around the corner.", "You will travel to a new country.", "Big career jump incoming!", "Avoid eating spicy food on Tuesdays."];
+                document.getElementById('fortune-display').innerHTML = `<p class="font-bold text-yellow-300">"${fortunes[Math.floor(Math.random()*fortunes.length)]}"</p>`;
+                playSound('success');
+            },
+            getNHIE: () => {
+                const prompts = ["Never have I ever ghosted someone.", "Never have I ever stalked an ex.", "Never have I ever lied about my age.", "Never have I ever eaten food from the trash.", "Never have I ever faked being sick."];
+                document.getElementById('nhie-display').innerHTML = `<p class="font-bold text-purple-200">"${prompts[Math.floor(Math.random()*prompts.length)]}"</p>`;
+                playSound('click');
+            },
+            
+            // NEW: FRIEND TYPE CLASSIFIER
+            startFriendType: () => {
+                const results = ["Ghost Friend 👻", "Therapist Friend 🛋️", "Party Instigator 🎉", "Silent Supporter 🤍"];
+                document.getElementById('friend-type-display').innerHTML = '<div class="spinner"></div>';
+                // Mocking random selection for single player simplicity
+                setTimeout(() => {
+                    const result = results[Math.floor(Math.random() * results.length)];
+                    document.getElementById('friend-type-display').innerHTML = `<p class="font-bold text-xl text-pink-300 animate-float">${result}</p>`;
+                    app.confettiExplosion();
+                }, 1500);
+            },
+
+            // NEW: 10-SEC TAP CHALLENGE
+            tapScore: 0,
+            tapTime: 10,
+            tapTimer: null,
+            tapGameActive: false,
+            tapGameAction: () => {
+                const btn = document.getElementById('tap-btn');
+                const timeEl = document.getElementById('tap-time');
+                const scoreEl = document.getElementById('tap-score');
+                const roastEl = document.getElementById('tap-roast');
+
+                if (!games.tapGameActive) {
+                    // Start Game
+                    games.tapGameActive = true;
+                    games.tapScore = 0;
+                    games.tapTime = 10;
+                    scoreEl.innerText = `Score: 0`;
+                    roastEl.innerText = "";
+                    btn.innerText = "TAP FAST!";
+                    btn.classList.add('tap-btn-active');
+                    
+                    games.tapTimer = setInterval(() => {
+                        games.tapTime--;
+                        timeEl.innerText = `Time: ${games.tapTime}s`;
+                        if (games.tapTime <= 0) {
+                            clearInterval(games.tapTimer);
+                            games.endTapGame();
+                        }
+                    }, 1000);
+                } else {
+                    // Tap Action
+                    games.tapScore++;
+                    scoreEl.innerText = `Score: ${games.tapScore}`;
+                    // Visual feedback
+                    btn.style.transform = 'scale(0.90)';
+                    setTimeout(() => btn.style.transform = 'scale(1)', 50);
+                    playSound('click');
+                }
+            },
+            endTapGame: () => {
+                games.tapGameActive = false;
+                const score = games.tapScore;
+                const btn = document.getElementById('tap-btn');
+                const roastEl = document.getElementById('tap-roast');
+                
+                btn.innerText = "PLAY AGAIN";
+                btn.classList.remove('tap-btn-active');
+                
+                let roast = "";
+                if (score < 20) roast = "That was slow… are you still in 2025? 🐢";
+                else if (score < 40) roast = "Not bad, but my grandma taps faster. 👵";
+                else if (score < 60) roast = "Okay, you have fast fingers! ⚡";
+                else roast = "CHEATER! Or you're a robot. 🤖";
+                
+                roastEl.innerText = roast;
+                app.confettiExplosion();
+            }
+        };
+
+        function updateCountdown() {
+            const diff = new Date("January 1, 2026 00:00:00").getTime() - new Date().getTime();
+            if (diff < 0) { document.getElementById("hero-section").innerHTML = `<h1 class="text-6xl font-black">HAPPY NEW YEAR!</h1>`; return; }
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+        }
+
+        function initFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h, particles = [];
+            const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+            window.addEventListener('resize', resize); resize();
+            function loop() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; ctx.fillRect(0, 0, w, h);
+                if (Math.random() < 0.05) particles.push({x: Math.random()*w, y: h, vx: (Math.random()-0.5)*4, vy: -(Math.random()*5+10), color: `hsl(${Math.random()*360},100%,70%)`});
+                particles.forEach((p, i) => { p.x += p.vx; p.y += p.vy; p.vy += 0.2; ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.fill(); if(p.y > h) particles.splice(i, 1); });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initFireworks();
+            setInterval(updateCountdown, 1000); updateCountdown();
+            document.getElementById('music-toggle').addEventListener('click', () => { 
+                const s = !audioCtx.state || audioCtx.state === 'suspended'; 
+                if(s) audioCtx.resume(); 
+            });
+        });
+    </script>
+</body>
+</html>
