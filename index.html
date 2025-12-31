@@ -832,6 +832,23 @@
                 if(s) audioCtx.resume(); 
             });
         });
+        let isNewYear = false;
+
+function updateCountdown() {
+    const diff = new Date("January 1, 2026 00:00:00").getTime() - Date.now();
+
+    if (diff < 0 && !isNewYear) {
+        isNewYear = true;
+        document.getElementById("greeting-text").innerText = "HAPPY NEW YEAR! 🎉";
+    }
+
+    if (diff < 0) return;
+
+    document.getElementById("days").innerText = Math.floor(diff / 86400000);
+    document.getElementById("hours").innerText = Math.floor((diff % 86400000) / 3600000);
+    document.getElementById("minutes").innerText = Math.floor((diff % 3600000) / 60000);
+}
+
     </script>
 </body>
 </html>
